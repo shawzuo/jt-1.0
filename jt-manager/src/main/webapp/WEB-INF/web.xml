@@ -1,7 +1,67 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
-
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="jt-manage" version="2.5">
+	<display-name>jt-manage</display-name>
+	<!--spring和SpringMVC的总结
+		配置方式:
+		1.通过前端控制器直接扫描全部容器
+		2.通过监听器的方式启动spring容器
+		
+		差别:
+		第一个种:
+		如果springMVC和spring的配置文件都是通过前端控制器扫描则容器的启动是懒加载的.
+		只有浏览器发出请求之后.前端控制器才会启动spring容器和springMVC容器.
+		弊端:如果是大型项目用户如果访问时.这时后台的容器才会启动.这时用户等待的时间较长.耗费时间主要在等待容器启动
+		
+		第二种:
+		通过监听器的方式启动spring容器当tomcat启动时,监听器就会监听是否需要spring容器
+		如果监听器检测到需要spring容器.则监听器会在后台启动spring容器(tomcat启动时spring容器已经加载完成)当用户通过浏览器访问时,首先将请求发给springMVC.
+		springMVC通过spring容器获取具体的对象直接完成业务调用户不要的等待容器启动.
+	  -->
+	
+	<!-- 配置监听器启动spring容器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:/spring/applicationContext*.xml</param-value>
+	</context-param>
+	
+	
+	<!-- 1.配置前端控制器 -->
+	<servlet>
+		<servlet-name>springmvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 配置加载springmvc.xml -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/spring/springmvc.xml</param-value>
+		</init-param>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>springmvc</servlet-name>
+		<!-- '/' 1 表示拦截全部请求； 2 表示所有静态资源js/css/imag,后期可以配置放行； 3 放行.jsp资源 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	
+	<!-- 配置全站乱码解决post乱码 -->
+	<filter>
+		<filter-name>characterEncoding</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<!-- 定义默认字符集 -->
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>characterEncoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 </web-app>
