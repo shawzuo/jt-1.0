@@ -11,13 +11,15 @@
 				<td colspan="5"><h2>用户信息</h2></td>
 			</tr>
 			<tr align="center">
+				<td>序号</td>
 				<td>ID</td>
 				<td>姓名</td>
 				<td>年龄</td>
 				<td>性别</td>
 			</tr>
-			<c:forEach items="${userList}" var="user">
-			<tr align="center">
+			<c:forEach items="${userList}" var="user" varStatus="status">
+				<tr align="center">
+				<td>${status.index+1}</td>
 				<td>${user.id}</td>
 				<td>${user.name}</td>
 				<td>${user.age}</td>
