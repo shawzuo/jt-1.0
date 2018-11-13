@@ -1,13 +1,22 @@
 package com.jt.manage.pojo;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.jt.common.po.BasePojo;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Table(name="tb_item")
 public class Item extends BasePojo{
 
 	private static final long serialVersionUID = 1L;
 
+	@Id	//主键定义
+	//主键自增
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	private String title;
 	private String sellPoint; 
